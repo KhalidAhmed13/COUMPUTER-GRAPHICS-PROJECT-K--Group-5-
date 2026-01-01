@@ -3,7 +3,7 @@
 #else
 #include <GL/glut.h>
 #endif
-
+#include <cmath>
 #include <stdlib.h>
 
 void Sky()
@@ -12,11 +12,11 @@ void Sky()
     glColor3f(0.62f, 0.86f, 0.94f);
 
 
-    glVertex2f(-1,0.2);//F
+    glVertex2f(-0.9971888839077,-0.2473947971585);//K
     glVertex2f(-1,1);//A
 
     glVertex2f(1,1);//B
-    glVertex2f(1,0.2);//H
+    glVertex2f(0.9878445002373,-0.315032477823);//R
 
     glEnd();
     glFlush();
@@ -40,7 +40,7 @@ void River()
 
 void Bridge()
 {
-    glBegin(GL_QUADS);
+    glBegin(GL_POLYGON);
     glColor3f(0.68f, 0.45f, 0.16f);
 
 
@@ -53,6 +53,26 @@ void Bridge()
     glEnd();
     glFlush();
 }
+
+void bridgeHalfCircle(float cx, float cy, float r)  //r = S1 (x-value)- R1 (X-value) = 0.5508333101402
+{
+    glBegin(GL_POLYGON);
+
+
+    for (int i = 0; i <= 180; i++)
+    {
+        float angle = i * 3.1416f / 180;
+        float x5 = cx + r * cos(angle);
+        float y5 = cy + r * sin(angle);
+        glVertex2f(x5, y5);
+    }
+    glEnd();
+}
+
+
+
+
+
 void Par1()
 {
     glBegin(GL_POLYGON);
@@ -159,25 +179,67 @@ void FrontWindow2()
 
 void metroDoor(float x1 , float y1)
 
-{
+{    // for large squre door
     glBegin(GL_QUADS);
-    glColor3f(0.36f, 0.36f, 0.36f);                                 //A1(x1-value)- I(x1-value) = -0.0755576703622
-    glVertex2f(x1,y1);//B1
-    glVertex2f(x1+0.0755576703622f , y1 );//I                      //A1(y1-value) - D1(y1-value) = 0.1460402195819
-    glVertex2f(x1+0.0755576703622f , y1-0.1460402195819 );//A1
-    glVertex2f(x1,y1-0.1460402195819); //D1
+    glColor3f(0.36f, 0.36f, 0.36f);                                 //A1(x-value)- I(x-value) = -0.0755576703622
+    glVertex2f(x1,y1);//I
+    glVertex2f(x1+0.0755576703622f , y1 );//A1                     //A1(y-value) - D1(y-value) = 0.1460402195819
+    glVertex2f(x1+0.0755576703622f , y1-0.1460402195819f );//D1
+    glVertex2f(x1,y1-0.1460402195819f); //B1
 
         glEnd();
-         glFlush();
+
+
+    //  door line
+
+         glBegin(GL_LINES);
+         glColor3f(1.0f, 0.0f, 0.0f);
+           glVertex2f(x1+0.0397434232971f , y1 );//C1
+           glVertex2f(x1+0.0397434232971f , y1-0.1475011107239f );//E1
+
+         glEnd();
 
 
 }
+
+
+      // right door glass
+
+
+void metroDoorglass1(float x2 , float y2)
+
+{
+    glBegin(GL_QUADS);
+    glColor3f(0.79f, 0.93f, 0.96f);                                  //G1(x-value)- F1(x-value) = 0.0195946148387
+    glVertex2f(x2,y2);//F1
+    glVertex2f(x2+0.0195946148387f , y2 );//G1                      //G1(y-value) - I1(y-value) = 0.0776629462188
+    glVertex2f(x2+0.0195946148387f , y2-0.0776629462188f );//H1
+    glVertex2f(x2,y2-0.0776629462188f); //I1
+
+        glEnd();
+
+}
+
+void metroDoorglass2(float x3 , float y3)
+
+{
+    glBegin(GL_QUADS);
+    glColor3f(0.79f, 0.93f, 0.96f);                                  //L1(x-value)- K1(x-value) = 0.02
+    glVertex2f(x3,y3);//K1
+    glVertex2f(x3+0.02f , y3 );//L1                      //L1(y-value) - M1(y-value) = 0.0793419561894
+    glVertex2f(x3+0.02f , y3-0.0793419561894f );//M1
+    glVertex2f(x3,y3-0.0793419561894); //N1
+
+        glEnd();
+
+}
+
 
 void Metroground()
 {
     glBegin(GL_POLYGON);
 
-    glColor3f(0.07f, 0.60f, 0.74f);
+    glColor3f(0.92f, 0.93f, 0.95f);
 
 
     glVertex2f(-0.1435947769341,0.2511826525513);//S
@@ -195,7 +257,7 @@ void Metro()
 {
     glBegin(GL_POLYGON);
 
-    glColor3f(0.58f, 0.59f, 0.60f);
+    glColor3f(0.02f, 0.33f, 0.18f);
 
 
     glVertex2f(-0.2547870153902,0.3299438214578);//Q
@@ -226,15 +288,48 @@ void Metro()
      float x1 = -0.0478643816085;//I - x value
      float y1 = 0.4809300509784;//I - y value
 
+
     for(int i = 0 ; i < 5 ; i++)
     {
 
         metroDoor(x1,y1);
 
-        x1 += 0.2907079706502; //I (x-value) + J (x-value) -  = -0.2907079706502
+        x1 += 0.2927079706502; //I (x-value) + J (x-value)  = 0.2927079706502
 
 
     }
+
+
+    float x2 = -0.0366571055259;//F1 - x value
+     float y2 = 0.4558842819022;//F1 - y value
+
+
+    for(int i = 0 ; i < 5 ; i++)
+    {
+
+        metroDoorglass1(x2,y2);
+
+        x2 += 0.292707970650; //I (x-value) + J (x-value)  = 0.2927079706502
+
+
+    }
+
+
+    float x3 = 0;//K1 - x value
+     float y3 = 0.4558842819022;//K1 - y value
+
+
+    for(int i = 0 ; i < 5 ; i++)
+    {
+
+        metroDoorglass2(x3,y3);
+
+        x3 += 0.292707970650; //I (x-value) + J (x-value)  = 0.2927079706502
+
+
+    }
+
+
 
 
 
@@ -258,6 +353,13 @@ void display()
     Par3();
     Metro();
     Metroground();
+
+    glColor3f(0.62f, 0.86f, 0.94f);
+    bridgeHalfCircle(0.0303880365053f, -0.4395526513102f,0.5508333101402f);   /* here
+                                                                                 cx = R1(x value)  = 0.0323247963122;
+                                                                                  cy = R1(y value) = -0.3436093325855;
+                                                                                    r = R1 = 0.5508333101402;*/
+
 
 
   glutSwapBuffers();   // IMPORTANT for double buffer
