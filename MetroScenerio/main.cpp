@@ -40,7 +40,7 @@ void River()
 
 void Bridge()
 {
-    glBegin(GL_POLYGON);
+    glBegin(GL_QUADS);
     glColor3f(0.68f, 0.45f, 0.16f);
 
 
@@ -53,6 +53,100 @@ void Bridge()
     glEnd();
     glFlush();
 }
+void BridgePillerLine()
+{
+    glBegin(GL_LINES);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glVertex2f(-1,0.3152721986892);//W1
+    glVertex2f(1,0.3152721986892);//z1
+    glEnd();
+    glFlush();
+
+
+}
+
+void BridgeSmallPiller(float x5 , float y5)
+
+{
+    glBegin(GL_LINES);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glVertex2f(x5, y5 );//A2
+    glVertex2f(x5,y5+0.072319898118); //A2 (y value) - B2(y value)= 0.072319898118
+
+         glEnd();
+         glFlush();
+
+
+}
+
+
+void BridgeLargePiller(float x6 , float y6)
+
+{
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glVertex2f(x6,y6);//D2
+    glVertex2f(x6+0.0203022955381f , y6 );//E2                        //E2(x-value)- D2(x-value) = 0.0203022955381
+    glVertex2f(x6+0.0203022955381f , y6-0.0838964834766f );//F2      //E2(y-value) - F2(y-value) = 0.0838964834766
+    glVertex2f(x6,y6-0.0838964834766f); //G2
+
+        glEnd();
+    glFlush();
+
+}
+
+
+void BridgeUpperpart()
+{
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.0f, 0.0f);
+
+
+    glVertex2f(-1,0.2);//F
+    glVertex2f(-1,0.2429523005712);//U1
+
+    glVertex2f(1,0.2429523005712);//V1
+    glVertex2f(1,0.2);//H
+
+    glEnd();
+
+    //for bridge small piller
+
+    float x5 = -0.9431364567251;//A2 - x value
+     float y5 = 0.2429523005712;//B2 - y value
+
+    for(int i = 0 ; i < 50 ; i++)
+    {
+
+        BridgeSmallPiller(x5,y5);
+
+        x5 += 0.0399230401513f;
+
+
+    }
+
+    glEnd();
+
+    //for bridge large piller
+
+    float x6 = -0.8916364635461;//D2 - x value = -0.8916364635461
+     float y6 = 0.3268487840478;//D2 - y value
+
+    for(int i = 0 ; i < 8 ; i++)
+    {
+
+        BridgeLargePiller(x6,y6);
+
+        x6 += 0.2543002451811f; //M2 (x value) - I2 (X value) = 0.2543002451811
+    }
+
+    glEnd();
+
+
+
+    glFlush();
+}
+
 
 void bridgeHalfCircle(float cx, float cy, float r)  //r = S1 (x-value)- R1 (X-value) = 0.5508333101402
 {
@@ -77,7 +171,7 @@ void Par1()
 {
     glBegin(GL_POLYGON);
 
-    glColor3f(0.0f,0.7f,0.0f);
+    glColor3f(0.0f,0.5f,0.0f);
 
 
     glVertex2f(-1,-0.6);//E
@@ -85,6 +179,19 @@ void Par1()
 
     glVertex2f(-0.5310625515532,-0.460935968825);//M
 
+
+    glEnd();
+
+
+    glBegin(GL_TRIANGLES);
+
+    glColor3f(0.89f, 0.82f, 0.38f);
+
+
+    glVertex2f(-1,-0.6);//E
+    glVertex2f(-1,-0.5283384912614);//N2
+
+    glVertex2f(-0.5310625515532,-0.460935968825);//M
 
     glEnd();
     glFlush();
@@ -95,7 +202,7 @@ void Par2()
 {
     glBegin(GL_POLYGON);
 
-    glColor3f(0.0f,0.7f,0.0f);
+    glColor3f(0.0f,0.5f,0.0f);
 
 
     glVertex2f(0.8133941285336,-0.4747971150962);//O
@@ -103,6 +210,19 @@ void Par2()
 
     glVertex2f(1,-0.5303478601908);//T
 
+
+    glEnd();
+
+
+    glBegin(GL_TRIANGLES);
+
+    glColor3f(0.89f, 0.82f, 0.38f);
+
+
+    glVertex2f(0.8133941285336,-0.4747971150962);//O
+    glVertex2f(1,-0.5);//O2
+
+    glVertex2f(1,-0.5303478601908);//T
 
     glEnd();
     glFlush();
@@ -219,6 +339,7 @@ void metroDoorglass1(float x2 , float y2)
         glEnd();
 
 }
+//left door glass
 
 void metroDoorglass2(float x3 , float y3)
 
@@ -239,7 +360,7 @@ void Metroground()
 {
     glBegin(GL_POLYGON);
 
-    glColor3f(0.92f, 0.93f, 0.95f);
+    glColor3f(0.08f, 0.61f, 0.74f);
 
 
     glVertex2f(-0.1435947769341,0.2511826525513);//S
@@ -348,11 +469,14 @@ void display()
     Sky();
     River();
     Bridge();
+
     Par1();
     Par2();
     Par3();
     Metro();
     Metroground();
+    BridgePillerLine();
+    BridgeUpperpart();
 
     glColor3f(0.62f, 0.86f, 0.94f);
     bridgeHalfCircle(0.0303880365053f, -0.4395526513102f,0.5508333101402f);   /* here
