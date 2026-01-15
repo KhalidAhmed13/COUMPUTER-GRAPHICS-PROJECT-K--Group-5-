@@ -5,11 +5,56 @@
 #endif
 #include <cmath>
 #include <stdlib.h>
+#include <iostream>
+
+using namespace std;
+ float trainleft;
+ float trainright;
+ float sunY;
+float t  = 0.0f;
+float R;
+float G;
+float B;
+float RR;
+float RG;
+float RB;
+bool above = false;
+bool below = true;
+
+void plotCirclePoints(float xc, float yc, float x, float y)
+{
+    glVertex2f(xc + x, yc + y);
+    glVertex2f(xc - x, yc + y);
+    glVertex2f(xc + x, yc - y);
+    glVertex2f(xc - x, yc - y);
+    glVertex2f(xc + y, yc + x);
+    glVertex2f(xc - y, yc + x);
+    glVertex2f(xc + y, yc - x);
+    glVertex2f(xc - y, yc - x);
+}
+
+void Sun(float xc, float yc, float r)
+{
+     glColor3f(0.85f, 0.71f, 0.11f);
+
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(xc, yc);   // center
+
+    for (float angle = 0; angle <= 360; angle += 1)
+    {
+        float rad = angle * 3.1416f / 180.0f;
+        glVertex2f(xc + cos(rad) * r, yc + sin(rad) * r);
+    }
+
+    glEnd();
+}
+
+
 
 void Sky()
 {
     glBegin(GL_QUADS);
-    glColor3f(0.62f, 0.86f, 0.94f);
+    glColor3f(R,G,B);
 
 
     glVertex2f(-0.9971888839077,-0.2473947971585);//K
@@ -25,7 +70,7 @@ void Sky()
 void River()
 {
     glBegin(GL_QUADS);
-    glColor3f(0.07f, 0.69f, 0.77f);
+    glColor3f(RR,RG,RB);
 
 
     glVertex2f(-1,-1);//D
@@ -44,7 +89,7 @@ void Bridge()
     glColor3f(0.68f, 0.45f, 0.16f);
 
 
-    glVertex2f(-0.9997394863153,-0.4352753401423);//G
+    glVertex2f(-0.9997394863153,-0.4262208144234);//G
     glVertex2f(-1,0.2);//F
 
     glVertex2f(1,0.2);//H
@@ -374,7 +419,7 @@ void Metroground()
     glFlush();
 }
 
-void Metro()
+void MetroUp()
 {
     glBegin(GL_POLYGON);
 
@@ -459,6 +504,116 @@ void Metro()
 
 }
 
+void update(int value)
+{
+    trainleft -= 0.018f;// move left
+    trainright += 0.018f;
+
+    if(above == false && below == true )
+    {
+
+        sunY += 0.0005f;
+
+
+    }
+    else if (above == true && below == false)
+    {
+        sunY -= 0.0005f;
+
+
+    }
+
+
+
+
+
+    if (trainleft <= -3.0f){
+
+
+        trainleft= 1.5f;
+
+
+
+
+}
+       if (trainright >= 7.0f){
+
+
+        trainright= -7.5f;
+
+
+
+
+}
+
+
+    if(sunY >= 0.75f && above == false && below == true  )
+    {
+        above = true;
+        below = false;
+
+        cout << "above :" << above << endl;
+        cout << "below :" << below << endl;
+
+
+    }
+
+    else if(sunY <= 0.0f && above == true && below == false)
+    {
+        above = false;
+        below = true;
+    }
+
+
+    if( t <= 1.0f && above == false && below == true )
+    {
+        t += 0.0006555f;
+
+        R = 0.02f + 0.98f*t - 0.4f*t*t;
+        G = 0.02f + 0.90f*t - 0.07f*t*t;
+        B = 0.10f + 0.90f*t*t;
+
+        RR = 0.02f + 0.51f * pow(t, 1.4f);
+        RG = 0.05f + 0.76f * pow(t, 1.2f);
+        RB = 0.20f + 0.72f * t;
+
+    }
+    else if( t >=0.0f && above == true && below == false){
+
+        t -= 0.0006555f ;
+        R = 0.02f + 0.98f*t - 0.4f*t*t;
+        G = 0.02f + 0.90f*t - 0.07f*t*t;
+        B = 0.10f + 0.90f*t*t;
+
+        RR = 0.02f + 0.51f * pow(t, 1.4f);
+        RG = 0.05f + 0.76f * pow(t, 1.2f);
+        RB = 0.20f + 0.72f * t;
+
+    }
+
+
+
+
+    glutPostRedisplay();
+    glutTimerFunc(20, update, 0);
+}
+
+
+void metroTrain(float trainMovex)
+{
+
+
+    glPushMatrix();
+
+    glTranslatef(trainMovex, 0.0f, 0.0f);
+    MetroUp();
+    Metroground();
+
+    glPopMatrix();
+
+
+}
+
 
 
 
@@ -467,19 +622,27 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT);
 
     Sky();
+    glPushMatrix();
+    glTranslatef(0.0f, sunY, 0.0f);
+    Sun(0.8f, 0.0f, 0.1f);
+    glPopMatrix();
     River();
     Bridge();
 
     Par1();
     Par2();
     Par3();
-    Metro();
-    Metroground();
+
+
+    metroTrain(trainleft);
+    metroTrain(trainright);
+
     BridgePillerLine();
     BridgeUpperpart();
 
-    glColor3f(0.62f, 0.86f, 0.94f);
-    bridgeHalfCircle(0.0303880365053f, -0.4395526513102f,0.5508333101402f);   /* here
+    glColor3f(R,G,B);
+    bridgeHalfCircle(0.0303880365053f, -0.4262208144234f,0.5508333101402f);
+    glutPostRedisplay();  /* here
                                                                                  cx = R1(x value)  = 0.0323247963122;
                                                                                   cy = R1(y value) = -0.3436093325855;
                                                                                     r = R1 = 0.5508333101402;*/
@@ -511,6 +674,7 @@ int main(int argc, char *argv[])
 
     init();
     glutDisplayFunc(display);
+    glutTimerFunc(2,update, 0);
 
     glutMainLoop();
     return EXIT_SUCCESS;
