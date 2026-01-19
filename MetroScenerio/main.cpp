@@ -6,11 +6,14 @@
 #include <cmath>
 #include <stdlib.h>
 #include <iostream>
+#include <math.h>
+#define PI 3.141592653589793
+
 
 using namespace std;
- float trainleft;
- float trainright;
- float sunY;
+float trainleft;
+float trainright;
+float sunY;
 float t  = 0.0f;
 float R;
 float G;
@@ -20,6 +23,14 @@ float RG;
 float RB;
 bool above = false;
 bool below = true;
+float cloudx;
+
+float boatx = -0.2f;
+float boaty = -0.2f;
+float boatsx = 1.0f;
+float boatsy = 1.0f;
+bool flag = true;
+float color;
 
 void plotCirclePoints(float xc, float yc, float x, float y)
 {
@@ -67,6 +78,26 @@ void Sky()
     glFlush();
 }
 
+
+
+void drawCircle(float cx, float cy, float r)
+{
+    int segments = 100;   // smoothness
+    glBegin(GL_POLYGON);
+
+    for (int i = 0; i < segments; i++)
+    {
+        float angle = 2.0f * PI * i / segments;
+        float x = r * cos(angle);
+        float y = r * sin(angle);
+
+        glVertex2f(cx + x, cy + y);
+    }
+
+    glEnd();
+}
+
+
 void River()
 {
     glBegin(GL_QUADS);
@@ -82,6 +113,64 @@ void River()
     glEnd();
     glFlush();
 }
+void Boat()
+{
+glPushMatrix();
+
+// Move boat to rotation center
+glTranslatef(boatx,boaty , 0.0f);
+
+// Rotate diagonally (negative = clockwise)
+glRotatef(-10.0f, -0.3f, 0.0f, 1.0f);
+
+glScalef(boatsx ,boatsy ,0.0f);
+
+// =====================
+// Boat Body (Brown)
+// =====================
+glColor3f(0.55f, 0.27f, 0.07f);
+glBegin(GL_POLYGON);
+    glVertex2f(-0.6267f, -0.7880f);
+    glVertex2f(-0.0683f, -0.5036f);
+    glVertex2f(-0.0718f, -0.5913f);
+    glVertex2f(-0.5494f, -0.8337f);
+glEnd();
+
+// =====================
+// Long Sail (Right)
+// =====================
+glColor3f(0.9f, 0.9f, 0.8f);
+glBegin(GL_POLYGON);
+    glVertex2f(-0.5452f, -0.2358f);
+    glVertex2f(-0.3554f, -0.6364f);
+    glVertex2f(-0.0683f, -0.5036f);
+glEnd();
+
+// =====================
+// Short Sail (Left)
+// =====================
+glBegin(GL_POLYGON);
+    glVertex2f(-0.5662f, -0.7333f);
+    glVertex2f(-0.5156f, -0.3370f);
+    glVertex2f(-0.3554f, -0.6364f);
+glEnd();
+
+// =====================
+// Black Line Between Sails
+// =====================
+glColor3f(0.0f, 0.0f, 0.0f);
+glLineWidth(2.0f);
+glBegin(GL_LINES);
+    glVertex2f(-0.3554f, -0.6364f);
+    glVertex2f(-0.5452f, -0.2358f);
+glEnd();
+
+glPopMatrix();
+glFlush();
+
+}
+
+
 
 void Bridge()
 {
@@ -342,6 +431,46 @@ void FrontWindow2()
     glFlush();
 }
 
+//back side window
+
+void FrontWindow3()
+{
+    glBegin(GL_QUADS);
+
+    glColor3f(0.79f, 0.93f, 0.96f);
+
+
+    glVertex2f(1.4589577986064,0.4036567645432);//W2
+    glVertex2f(1.4589577986064,0.46);//U2
+
+    glVertex2f(1.48,0.46);//V2
+    glVertex2f(1.4853923285426,0.4036567645432);//Z2
+
+
+
+    glEnd();
+    glFlush();
+}
+
+
+void FrontWindow4()
+{
+    glBegin(GL_TRIANGLES);
+
+    glColor3f(0.79f, 0.93f, 0.96f);
+
+
+    glVertex2f(1.4997897064542,0.4036567645432);//S2
+    glVertex2f(1.4882041803231,0.46);//R2
+
+    glVertex2f(1.5507705856168,0.4036567645432);//T2
+
+
+
+    glEnd();
+    glFlush();
+}
+
 void metroDoor(float x1 , float y1)
 
 {    // for large squre door
@@ -436,6 +565,9 @@ void MetroUp()
 
          FrontWindow1();
          FrontWindow2();
+         FrontWindow3();
+         FrontWindow4();
+
 
 
      float x = 0.0413956624331;//W - x value
@@ -577,6 +709,8 @@ void update(int value)
         RG = 0.05f + 0.76f * pow(t, 1.2f);
         RB = 0.20f + 0.72f * t;
 
+        color = 0.5f + 0.5f * t;
+
     }
     else if( t >=0.0f && above == true && below == false){
 
@@ -589,7 +723,51 @@ void update(int value)
         RG = 0.05f + 0.76f * pow(t, 1.2f);
         RB = 0.20f + 0.72f * t;
 
+        color = 0.5f + 0.5f * t;
+
     }
+
+    if(boaty <= -0.03f && flag)
+    {
+        boatx +=0.0005;
+        boaty += 0.0005;
+        boatsx -= 0.0005;
+        boatsy -= 0.0005;
+    }
+    else if(boatsx >= 0.0f && boatsy >= 0.0f)
+    {
+        boatx -=0.00023;
+        boaty -= 0.00023;
+
+        boatsx -= 0.0005;
+        boatsy -= 0.0005;
+        flag = false;
+    }
+
+    if(boatsx <= 0.0f && boatsy <= 0.0f)
+    {
+        boatsx = 1.0f;
+        boatsy = 1.0f;
+        boatx = -0.2f;
+        boaty = -0.2f;
+        flag = true;
+    }
+    if(cloudx <= 1.8f )
+    {
+        cloudx += 0.0005f;
+
+    }
+
+    else{
+
+      cloudx = -1.6f;
+    }
+
+
+
+
+
+
 
 
 
@@ -627,7 +805,9 @@ void display()
     Sun(0.8f, 0.0f, 0.1f);
     glPopMatrix();
     River();
+
     Bridge();
+
 
     Par1();
     Par2();
@@ -642,10 +822,44 @@ void display()
 
     glColor3f(R,G,B);
     bridgeHalfCircle(0.0303880365053f, -0.4262208144234f,0.5508333101402f);
-    glutPostRedisplay();  /* here
-                                                                                 cx = R1(x value)  = 0.0323247963122;
-                                                                                  cy = R1(y value) = -0.3436093325855;
-                                                                                    r = R1 = 0.5508333101402;*/
+
+
+
+
+
+     //cloud
+
+     glColor3f(color,color,color);
+
+     glPushMatrix();
+
+     glTranslatef(cloudx, 0.0f, 0.0f);
+
+    drawCircle(-0.1f, 0.8f, 0.0931772472179f); //w1
+
+
+
+    drawCircle(0.05f, 0.8f, 0.1567941478983f); //z1
+
+
+    drawCircle(0.24f, 0.8f, 0.1272743704149f); //a2
+
+
+
+    drawCircle(-0.4f, 0.8f, 0.0917201246409f); //c2
+
+
+
+    drawCircle(-0.5f, 0.8f, 0.06425599519322091f); //b2
+
+    glPopMatrix();
+
+    glFlush();
+
+
+
+     Boat();
+    glutPostRedisplay();
 
 
 
