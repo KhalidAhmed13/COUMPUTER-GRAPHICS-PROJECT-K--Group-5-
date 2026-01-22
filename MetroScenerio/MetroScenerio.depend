@@ -1,9 +1,10 @@
 # depslib dependency file v1.0
-1769041487 source:f:\semester 9\computer graphics\final\metroproject\metroscenerio\main.cpp
+1769058982 source:f:\semester 9\computer graphics\final\metroproject\metroscenerio\main.cpp
 	<GLUT/glut.h>
 	<GL/glut.h>
-	<cmath>
 	<windows.h>
+	<mmsystem.h>
+	<cmath>
 	<stdlib.h>
 	<iostream>
 	<math.h>

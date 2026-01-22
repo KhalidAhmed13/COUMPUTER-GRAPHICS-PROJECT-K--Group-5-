@@ -3,8 +3,10 @@
 #else
 #include <GL/glut.h>
 #endif
-#include <cmath>
 #include <windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+#include <cmath>
 #include <stdlib.h>
 #include <iostream>
 #include <math.h>
@@ -19,7 +21,6 @@ float fishFloat = 0.0f;
 float rodAngle = 0.0f;
 bool rodUp = true;
 bool boatUp = true;
-
 float trainleft;
 float trainright;
 float sunY;
@@ -33,7 +34,6 @@ float RB;
 bool above = false;
 bool below = true;
 float cloudx;
-
 float boatx = -0.2f;
 float boaty = -0.2f;
 float boatsx = 1.0f;
@@ -41,6 +41,15 @@ float boatsy = 1.0f;
 bool flag = true;
 float color;
 float planex = -1.0f;
+
+void playSound()
+{
+    PlaySound("backgroundMusic.wav", NULL, SND_FILENAME | SND_ASYNC);
+
+
+}
+
+
 
 // Function to draw the plane with adjusted body and wings
 void drawplane()
@@ -272,6 +281,129 @@ void background()
 
     glEnd();
 
+
+    glColor3f(0.55f, 0.27f, 0.07f);
+    glLineWidth(5.0f);
+    glBegin(GL_LINES);
+    glVertex2f(0.3644427025137, -0.1763132073391);
+    glVertex2f(0.3642106904113, -0.0543750883458);
+    glEnd();
+
+    glColor3f(0.0f, 0.39f, 0.0f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(0.295187514663, -0.064400803089);//w
+    glVertex2f(0.4333336418965, -0.0617942723865);//l
+    glVertex2f(0.3668671089823, 0.0724420587932);//m
+    glEnd();
+
+    glFlush();
+}
+
+void tree()
+{
+    glColor3f(0.55f, 0.27f, 0.07f);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.8614777073501, -0.4835819073043);
+    glVertex2f(-0.801392119717, -0.4835819073043);
+    glVertex2f(-0.7959924647932, -0.1888981290592);
+    glVertex2f(-0.8541946058188, -0.1886162952874);
+    glEnd();
+
+    glColor3f(0.0f, 0.39f, 0.0f);  // Dark green color
+
+    float cx = -0.8294650635141f;  // X coordinate of the circle's center
+    float cy = -0.1206023261226f;  // Y coordinate of the circle's center
+    float r = 0.1f;  // Radius of the circle
+    int segments = 100;  // Number of segments for smoothness
+
+    glBegin(GL_POLYGON);  // Begin drawing the circle
+
+    for (int i = 0; i < segments; i++) {
+        float angle = 2.0f * PI * i / segments;
+        float x = r * cos(angle);
+        float y = r * sin(angle);
+
+        glVertex2f(cx + x, cy + y);  // Calculate and plot each point on the circle
+    }
+
+    glEnd();
+
+
+    glColor3f(0.0f, 0.39f, 0.0f);  // Dark green color
+
+    float cx2 = -0.6981538553702f;  // X coordinate of the circle's center
+    float cy2 = -0.0824797173067f;  // Y coordinate of the circle's center
+    float r2 = 0.1f;  // Radius of the circle
+    int segments2 = 100;  // Number of segments for smoothness
+
+    glBegin(GL_POLYGON);  // Begin drawing the circle
+
+    for (int i = 0; i < segments; i++) {
+        float angle = 2.0f * PI * i / segments;
+        float x2 = r * cos(angle);
+        float y2 = r * sin(angle);
+
+        glVertex2f(cx2 + x2, cy2 + y2);  // Calculate and plot each point on the circle
+    }
+
+    glEnd();
+
+     glColor3f(0.0f, 0.39f, 0.0f);  // Dark green color
+
+    float cx3 = -0.7842827123248f;  // X coordinate of the circle's center
+    float cy3 = 0.0163566759199f;   // Y coordinate of the circle's center
+    float r3 = 0.1f;  // Radius of the circle
+    int segments3 = 100;  // Number of segments for smoothness
+
+    glBegin(GL_POLYGON);  // Begin drawing the circle
+
+    for (int i = 0; i < segments; i++) {
+        float angle = 2.0f * PI * i / segments;
+        float x3 = r * cos(angle);
+        float y3 = r * sin(angle);
+
+        glVertex2f(cx3 + x3, cy3 + y3);  // Calculate and plot each point on the circle
+    }
+
+    glEnd();
+
+    glColor3f(0.0f, 0.39f, 0.0f);  // Dark green color
+
+    float cx4 = -0.9613083633681f;  // X coordinate of the circle's center
+    float cy4 = -0.0811910323106f;  // Y coordinate of the circle's center
+    float r4 = 0.1f;  // Radius of the circle
+    int segments4 = 100;  // Number of segments for smoothness
+
+    glBegin(GL_POLYGON);  // Begin drawing the circle
+
+    for (int i = 0; i < segments; i++) {
+        float angle = 2.0f * PI * i / segments;
+        float x4 = r * cos(angle);
+        float y4 = r * sin(angle);
+
+        glVertex2f(cx4 + x4, cy4 + y4);  // Calculate and plot each point on the circle
+    }
+
+    glEnd();
+
+    glColor3f(0.0f, 0.39f, 0.0f);  // Dark green color
+
+    float cx5 = -0.9f;  // X coordinate of the circle's center
+    float cy5 = 0.0f;   // Y coordinate of the circle's center
+    float r5 = 0.1f;    // Radius of the circle
+    int segments5 = 100; // Number of segments for smoothness
+
+    glBegin(GL_POLYGON);  // Begin drawing the circle
+
+    for (int i = 0; i < segments; i++) {
+        float angle = 2.0f * PI * i / segments;
+        float x5 = r * cos(angle);
+        float y5 = r * sin(angle);
+
+        glVertex2f(cx5 + x5, cy5 + y5);  // Calculate and plot each point on the circle
+    }
+
+    glEnd();
     glFlush();
 }
 
@@ -978,8 +1110,7 @@ void update(int value)
         above = true;
         below = false;
 
-        cout << "above :" << above << endl;
-        cout << "below :" << below << endl;
+
 
 
     }
@@ -1026,8 +1157,8 @@ void update(int value)
     {
         boatx +=0.0005;
         boaty += 0.0005;
-        boatsx -= 0.0007;
-        boatsy -= 0.0007;
+        boatsx -= 0.0005;
+        boatsy -= 0.0005;
     }
     else if(boatsx >= 0.0f && boatsy >= 0.0f)
     {
@@ -1127,6 +1258,8 @@ void metroTrain(float trainMovex)
 
 void display()
 {
+
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     Sky();
@@ -1174,6 +1307,7 @@ void display()
     drawCircle(-0.5f, 0.8f, 0.06425599519322091f);  // Draw cloud 5
     glPopMatrix();
 
+    tree();
     Boat();
     FishingBoat();
 
@@ -1214,6 +1348,7 @@ int main(int argc, char *argv[])
     init();
     glutDisplayFunc(display);
     glutTimerFunc(2, update, 0);
+    playSound();
     glutMainLoop();
     return EXIT_SUCCESS;
 }
